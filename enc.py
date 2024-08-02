@@ -8,12 +8,12 @@ from pdf2image import convert_from_path
 import tempfile
 import os
 
-# Fungsi untuk mendownload gambar stego ke dalam bentuk 'PNG'
+# Fungsi untuk mendownload gambar stego ke dalam bentuk 'jpg'
 def get_image_download_link(img, filename, text):
     buffered = BytesIO()
-    img.save(buffered, format='png')
+    img.save(buffered, format='jpg')
     img_str = base64.b64encode(buffered.getvalue()).decode()
-    href = f'<a href="data:image/png;base64,{img_str}" download="{filename}">{text}</a>'
+    href = f'<a href="data:image/jpg;base64,{img_str}" download="{filename}">{text}</a>'
     return href
 
 # Fungsi untuk menyesuaikan ukuran cover dengan ukuran message
@@ -95,7 +95,7 @@ def encryptPage():
             # Ubah kembali array stego menjadi gambar
             stego_img = Image.fromarray(stego.astype(np.uint8))
 
-            stego_img.save('stegofile.png')
+            stego_img.save('stegofile.jpg')
 
             # Tambahkan link unduhan
-            st.markdown(get_image_download_link(stego_img, 'stegofile.png', 'Download Stego Image'), unsafe_allow_html=True)
+            st.markdown(get_image_download_link(stego_img, 'stegofile.jpg', 'Download Stego Image'), unsafe_allow_html=True)
