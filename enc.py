@@ -16,8 +16,6 @@ def get_image_download_link(img, filename, text):
     href = f'<a href="data:image/png;base64,{img_str}" download="{filename}">{text}</a>'
     return href
 
-# Fungsi untuk menyesuaikan ukuran cover dengan ukuran message
-
     
           
             
@@ -32,8 +30,9 @@ def get_image_download_link(img, filename, text):
           
           Expand Up
     
-    @@ -95,7 +95,7 @@ def encryptPage():
+    @@ -98,4 +98,4 @@ def encryptPage():
   
+# Fungsi untuk menyesuaikan ukuran cover dengan ukuran message
 def resize_image(cover, message):
     if message.mode != 'RGB':
         message = message.convert('RGB')
@@ -96,7 +95,6 @@ def encryptPage():
             st.image(stego, caption='Hasil Stegofile', channels='GRAY')
             # Ubah kembali array stego menjadi gambar
             stego_img = Image.fromarray(stego.astype(np.uint8))
-
             stego_img.save('stegofile.png')
 
             # Tambahkan link unduhan
