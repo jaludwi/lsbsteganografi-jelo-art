@@ -37,14 +37,14 @@ def handlePdf(cover_file):
 def encryptPage():
     # Unggah gambar cover
     st.markdown("<h4 style='text-align: left;'>Upload Gambar Cover</h4>", unsafe_allow_html=True)
-    cover_file = st.file_uploader('', type=['png', 'jpg', 'bmp'], key="cover")
+    cover_file = st.file_uploader('', key="cover")
     if cover_file is not None:
         cover = Image.open(cover_file)
         if cover.mode != 'RGB':
             cover = cover.convert('RGB')
         # Unggah gambar pesan
         st.markdown("<h4 style='text-align: left;'>Upload File</h4>", unsafe_allow_html=True)
-        message_file = st.file_uploader('', type=['png', 'jpg', 'bmp' , 'pdf'], key="message")
+        message_file = st.file_uploader('', key="message")
         if message_file is not None:
             if message_file.type == 'application/pdf':
                 message = handlePdf(message_file)
@@ -59,11 +59,11 @@ def encryptPage():
             # Reduce the contrast of the message image
             # enhancer = ImageEnhance.Contrast(message)
             # message = enhancer.enhance(0.1)
-
+            
             # Menyamakan ukuran gambar cover dengan gambar pesan
+            message = resize_image(message, cover)
             cover = resize_image(cover, message)
-            message = resize_image(message, cover) 
-
+             
             # Ubah ke array untuk manipulasi
             cover = np.array(cover, dtype=np.uint8)
             message = np.array(message, dtype=np.uint8)
@@ -79,7 +79,7 @@ def encryptPage():
             showmess = messageshift << (8-imbed)
 
             # Display the showmess image
-            st.image(showmess, caption='This is your message image with the embedded bits')
+            st.image(showmess, caption='pesan kamu 🤫')
 
             # Sekarang, ubah nilai bit yang disematkan menjadi nol pada gambar sampul
             coverzero = cover & ~(0b11111111 >> imbed)
@@ -90,12 +90,12 @@ def encryptPage():
             stego = np.clip(stego, 0, 255)
 
             # Tampilkan gambar stego
-            st.image(stego, caption='This is your stego image', channels='GRAY')
+            st.image(stego, caption='hasil stegofile kamu :)', channels='GRAY')
 
             # Ubah kembali array stego menjadi gambar
             stego_img = Image.fromarray(stego.astype(np.uint8))
 
-            stego_img.save('stego.png')
+            stego_img.save('banner soto ayam.png')
 
             # Tambahkan link unduhan
             st.markdown(get_image_download_link(stego_img, 'stego.png', 'Download Stego Image'), unsafe_allow_html=True)
