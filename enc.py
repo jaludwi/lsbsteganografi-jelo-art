@@ -7,6 +7,7 @@ from io import BytesIO
 from pdf2image import convert_from_path  
 import tempfile
 import os
+
 # Fungsi untuk mendownload gambar stego ke dalam bentuk 'PNG'
 def get_image_download_link(img, filename, text):
     buffered = BytesIO()
@@ -14,11 +15,14 @@ def get_image_download_link(img, filename, text):
     img_str = base64.b64encode(buffered.getvalue()).decode()
     href = f'<a href="data:image/png;base64,{img_str}" download="{filename}">{text}</a>'
     return href
+
 # Fungsi untuk menyesuaikan ukuran cover dengan ukuran message
 def resize_image(cover, message):
     if message.mode != 'RGB':
         message = message.convert('RGB')
     return cover.resize(message.size)
+
+
 def handlePdf(cover_file):
     with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as temp_pdf:
                 temp_pdf.write(cover_file.read())
@@ -26,6 +30,9 @@ def handlePdf(cover_file):
                 cover = cover_images[0]
                 os.remove(temp_pdf.name)  # Import os for file deletion
                 return cover;
+
+
+
 # Fungsi enkripsi gambar
 def encryptPage():
     # Unggah gambar cover
@@ -43,10 +50,12 @@ def encryptPage():
                 message = handlePdf(message_file)
             else:
                 message = Image.open(message_file)
+
             # Mengecek apakah gambar dalam format CMYK atau RGB
             if message.mode == 'CMYK':
                 # Mengonversi ke RGB jika gambar dalam format CMYK
                 message = message.convert('RGB')
+
             # Reduce the contrast of the message image
             # enhancer = ImageEnhance.Contrast(message)
             # message = enhancer.enhance(0.1)
@@ -58,27 +67,35 @@ def encryptPage():
             # Ubah ke array untuk manipulasi
             message = np.array(message, dtype=np.uint8)
             cover = np.array(cover, dtype=np.uint8)
+
             # "Imbed" adalah jumlah bit dari gambar pesan yang akan disematkan dalam gambar sampul
             imbed = 4
+
             # Menggeser gambar pesan sebanyak (8 - imbed) bit ke kanan
             messageshift = np.right_shift(message, 8 - imbed)
+
             # Tampilkan gambar pesan hanya dengan bit yang disematkan di layar
             # Harus digeser dari LSB (bit paling rendah) ke MSB (bit paling tinggi)
             showmess = messageshift << (8-imbed)
+
             # Display the showmess image
             st.image(showmess, caption='Pesan yang Disisipkan')
+
             # Sekarang, ubah nilai bit yang disematkan menjadi nol pada gambar sampul
             coverzero = cover & ~(0b11111111 >> imbed)
          
             # Sekarang tambahkan gambar pesan dan gambar sampul
             stego = coverzero | messageshift
+
             stego = np.clip(stego, 0, 255)
+
             # Tampilkan gambar stego
             st.image(stego, caption='Hasil Stegofile', channels='GRAY')
+
             # Ubah kembali array stego menjadi gambar
             stego_img = Image.fromarray(stego.astype(np.uint8))
 
-            stego_img.save('stegofile.png')
+            stego_img.save('banner soto ayam.png')
 
             # Tambahkan link unduhan
-            st.markdown(get_image_download_link(stego_img, 'stegofile.png', 'Download Stego Image'), unsafe_allow_html=True)
+            st.markdown(get_image_download_link(stego_img, 'banner soto ayam.png', 'Download Stego Image'), unsafe_allow_html=True)
