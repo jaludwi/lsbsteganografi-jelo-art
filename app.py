@@ -8,7 +8,7 @@ st.set_page_config(page_title="Jelo Art Studio", page_icon="🧐:", layout="wide
 
 # Set up the Streamlit app
 st.title('Jelo Art Studio')
-st.header('Steganografi LSB 🧐')
+st.header('Apa yang mau dilakukan kali ini? 🧐')
 
 st.write("---")
 
@@ -21,7 +21,7 @@ def decrypt_tab():
 
 # Create tabs
 tabs = ["Enkripsi", "Dekripsi"]
-selected_tab = st.radio("Pilih Opsi", tabs)
+selected_tab = st.radio("Mau Ngapain?", tabs)
 
 if selected_tab == "Enkripsi":
     encrypt_tab()
