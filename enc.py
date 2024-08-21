@@ -105,13 +105,13 @@ def encode_image(mode,cover_image_path, input_file_path):
 def encryptPage():
     # Unggah gambar cover
     st.markdown("<h4 style='text-align: left;'>Upload Gambar Cover</h4>", unsafe_allow_html=True)
-    cover_file = st.file_uploader('', type=['png', 'jpg', 'bmp'], key="cover")
+    cover_file = st.file_uploader('', type=[''], key="cover")
     
     if cover_file is not None:
         cover_width, cover_height, total_capacity_bits, total_capacity_bytes = calculate_capacity(cover_file)
         # Unggah gambar pesan
         st.markdown("<h4 style='text-align: left;'>Upload File</h4>", unsafe_allow_html=True)
-        message_file = st.file_uploader('', type=['png', 'jpg', 'bmp' , 'pdf'], key="message")
+        message_file = st.file_uploader('', type=[''], key="message")
         if message_file is not None:
             if message_file.type != 'application/pdf':
                 hidden_image = Image.open(message_file)
@@ -133,7 +133,7 @@ def encryptPage():
             encoded_image = Image.fromarray(cover_pixels)
             encoded_image.save('stego.png')
             # Tampilkan gambar stego
-            st.image(cover_pixels, caption='This is your stego image', channels='GRAY')
+            st.image(cover_pixels, caption='Steganografi Berhasil', channels='GRAY')
 
             # Tambahkan link unduhan
             st.markdown(get_image_download_link(encoded_image, 'stego.png', 'Download Stego Image'), unsafe_allow_html=True)
