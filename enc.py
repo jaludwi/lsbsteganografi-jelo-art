@@ -133,7 +133,7 @@ def encryptPage():
             encoded_image = Image.fromarray(cover_pixels)
             encoded_image.save('stego.png')
             # Tampilkan gambar stego
-            st.image(cover_pixels, caption='This is your stego image', channels='GRAY')
+            st.image(cover_pixels, caption='Steganografi Berhasil', channels='GRAY')
 
             # Tambahkan link unduhan
             st.markdown(get_image_download_link(encoded_image, 'stego.png', 'Download Stego Image'), unsafe_allow_html=True)
